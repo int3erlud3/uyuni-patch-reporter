@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uyuni-patch-reporter"
+version = "1.0.0"
+description = "Read-only patch, outdated-system and reboot report for Uyuni / SUSE Manager via the XML-RPC API"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Alii" }]
+requires-python = ">=3.10"
+dependencies = ["defusedxml>=0.7.1"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: System :: Systems Administration",
+  "Intended Audience :: System Administrators",
+  "Environment :: Console",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "bandit>=1.7"]
+
+[project.scripts]
+uyuni-patch-reporter = "uyuni_patch_reporter.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.j2", "*.sql"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF", "PL"]
+ignore = ["PLR2004"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106", "S107", "PLR2004", "S603", "S607", "PLR0913", "PLR0917", "PLC0415"]
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
